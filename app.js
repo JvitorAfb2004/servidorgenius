@@ -1,10 +1,10 @@
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
-const fs = require('fs');
-const https = require('https');
 const bodyParser = require('body-parser');
 const axios = require('axios');
+const http = require('http');
+const fs = require('fs');
 
 // Configuração do aplicativo
 const app = express();
@@ -13,17 +13,10 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 
-// Carregar certificados SSL
-const privateKey = fs.readFileSync('private.key', 'utf8');
-const certificate = fs.readFileSync('certificate.crt', 'utf8');
-const caBundle = fs.readFileSync('ca_bundle.crt', 'utf8');
-
-const credentials = { key: privateKey, cert: certificate, ca: caBundle };
-
 // Rota para calcular a distância
 app.get('/api/distance', async (req, res) => {
   try {
-    const response = await axios.get(`https://maps.googleapis.com/maps/api/distancematrix/json`, {
+    const response = await axios.get('https://maps.googleapis.com/maps/api/distancematrix/json', {
       params: {
         origins: req.query.origins,
         destinations: req.query.destinations,
@@ -60,8 +53,8 @@ app.get('/gerarqrcode', async (req, res) => {
   }
 });
 
-// Configuração do servidor HTTPS na porta 3000
+// Inicia o servidor HTTP na porta 3000
 const PORT = 3000;
-https.createServer(credentials, app).listen(PORT, () => {
-  console.log(`Servidor HTTPS rodando na porta ${PORT}`);
+http.createServer(app).listen(PORT, () => {
+  console.log(`Servidor HTTP rodando na porta ${PORT}`);
 });

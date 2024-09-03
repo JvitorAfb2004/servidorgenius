@@ -60,25 +60,8 @@ app.get('/gerarqrcode', async (req, res) => {
   }
 });
 
-// Função para encontrar uma porta aleatória disponível
-function findRandomPort() {
-  return new Promise((resolve, reject) => {
-    const server = https.createServer(credentials, app);
-    server.listen(0, () => {
-      const port = server.address().port;
-      server.close(() => resolve(port));
-    });
-    server.on('error', reject);
-  });
-}
-
-// Inicia o servidor HTTPS na porta aleatória
-findRandomPort()
-  .then(port => {
-    https.createServer(credentials, app).listen(port, () => {
-      console.log(`Servidor HTTPS rodando na porta ${port}`);
-    });
-  })
-  .catch(err => {
-    console.error('Erro ao encontrar uma porta aleatória:', err);
-  });
+// Configuração do servidor HTTPS na porta 3000
+const PORT = 3000;
+https.createServer(credentials, app).listen(PORT, () => {
+  console.log(`Servidor HTTPS rodando na porta ${PORT}`);
+});

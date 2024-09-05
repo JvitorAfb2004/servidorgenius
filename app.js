@@ -13,6 +13,11 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
 // Rota para calcular a distância
 app.get('/api/distance', async (req, res) => {
   try {
